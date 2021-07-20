@@ -181,10 +181,10 @@ async function addEmpl() {
             choices: managers.map(choices => choices.Manager)
         }
     ])
-    let man = managers.find(choices => choices.manager === managers.manager_name)
+    let man = managers.find(choices => choices.Manager === employees.manager)
     employees.manager = man.id
-
-    let rol = roles.find(choices => choices.roles === roles.title)
+console.log(employees.manager)
+    let rol = roles.find(choices => choices.title === employees.role)
     employees.role = rol.id
 
     addEmployee(employees)
@@ -221,10 +221,11 @@ async function addRoletodb() {
             choices: departments.map(choices => choices.deparetment_name)
         }
     ])
-    let dep = departments.find(choices => choices.deparetment === departments.deparetment_name)
+    let dep = departments.find(choices => choices.deparetment_name === roles.department)
     roles.department = dep.id
+
     addRole(roles)
-    console.log(`Adding ${roles.title} to the database`)
+    
     start()
 }
 
