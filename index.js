@@ -56,9 +56,7 @@ function getRoles() {
     return db.promise().query(`SELECT * FROM roles`)
 }
 
-function getRoleTitles(){
-    return db.promise().query("SELECT title FROM roles")
-}
+
 
 function getEmployees() {
     return db.promise().query(`SELECT * FROM employee`)
@@ -77,37 +75,36 @@ function getEmployees() {
 
 
 
-//------------------ VIEW EMPLOYEE :) ---------------------------------------------------------------------------------------------------------------------------------------------------------------------
-// TABLE NOT WORKING DONT ASK ME WHY I HAVE NO IDEA 
+//------------------ VIEW EMPLOYEE :) ---------------------------------------------------------------------------------------------------------------------------------------------------------------------// TABLE NOT WORKING DONT ASK ME WHY I HAVE NO IDEA 
 
 
- function viewEmployees() {
+function viewEmployees() {
     db.promise().query(`SELECT * FROM employee;`)
-    .then(([row]) => {
-      
-       let employees= row;
-       console.log('\n');
-       console.table(employees)
-       start()
-      
-    })
-    
+        .then(([row]) => {
+
+            let employees = row;
+            console.log('\n');
+            console.table(employees)
+            start()
+
+        })
+
 }
 
 //------------------ VIEW DEPARTEMENT :) ---------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 
 function viewDepartments() {
-     db.promise().query(`SELECT * FROM departements;`)
-     .then(([row]) => {
-        
-        let departements = row;
-        console.log('\n');
-        console.table(departements)
-        start()
-       
-     })
-     
+    db.promise().query(`SELECT * FROM departements;`)
+        .then(([row]) => {
+
+            let departements = row;
+            console.log('\n');
+            console.table(departements)
+            start()
+
+        })
+
 }
 
 //------------------ VIEW ROLES :) ---------------------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -115,38 +112,63 @@ function viewDepartments() {
 
 function viewRoles() {
     db.promise().query(`SELECT * FROM roles`)
-.then(([row])=> {
-    let roles= row;
-    console.log('\n');
-    console.table(roles)
-    start()
-})
+        .then(([row]) => {
+            let roles = row;
+            console.log('\n');
+            console.table(roles)
+            start()
+        })
 
 }
 
 
 //------------------ ADD EMPLOYEE :) ---------------------------------------------------------------------------------------------------------------------------------------------------------------------// Shows undefined in role and department and cant add it to the table
-function getDepartments() {
-    return db.promise().query(`SELECT department_name FROM departements;`)
-     .then(([row]) => {
-        let departements = row;
-        console.log('\n');
+
+function getDepartmentsname() {
+    return db.promise().query(`SELECT id, CONCAT (department_name) AS deparetment_name FROM departements;`)
+        .then(([row]) => {
+
+            let departements = row;
+
+            
+            return row
+        })
+}
+
+function getRoleTitles() {
+    return db.promise().query("SELECT id, CONCAT(title) AS title FROM roles")
+        .then(([row]) => {
+
+            let roles = row;
+
+           
+            return row
+        })
+}
+
+function getManager() {
+    return db.promise().query('SELECT id, CONCAT(manager_name) AS Manager FROM managers')
+    .then(([row]) => {
+
+        let manager = row;
+
+        
         return row
-     })
+    })
 }
 
-
-function getManager(){
-    return db.query('SELECT id, CONCAT(first_name, " ", last_name) AS manager FROM employee')
-}
 
 function addEmployee(employees) {
     return db.query(`INSERT INTO employee (first_name, last_name ) VALUES("${employees.first_name}","${employees.lastname}");`)
 }
 
+function addManager(employees){
+    return db.query(`INSERT INTO managers  (manager_name) VALUES("${employees.first_name} ${employees.lastname}")`)
+}
+
 async function addEmpl() {
 
-    let departments = await getDepartments()
+    let departments = await getDepartmentsname()
     let roles = await getRoleTitles()
     let managers = await getManager()
     let employees = await inquirer.prompt([
@@ -165,22 +187,23 @@ async function addEmpl() {
             type: "list",
             name: 'role',
             message: 'What is the employee\'s role',
-            choices: roles
+            choices: roles.map(choices => choices.title )
         },
         {
             type: 'list',
             name: 'department',
             message: 'What is the employee\'s department',
-            choices: departments
+            choices: departments.map(choices => choices.deparetment_name)
         },
         {
             type: 'list',
             name: 'manager',
             message: 'What is the employee\'s manager',
-            choices: managers
+            choices: managers.map(choices => choices.Manager)
         }
     ])
     addEmployee(employees)
+    addManager(employees)
     start()
 }
 
@@ -188,6 +211,7 @@ async function addEmpl() {
 function addRole(roles) {
     return db.query(`INSERT INTO roles (title, salary) VALUES("${roles.title}", "${roles.salary}");`)
 }
+
 
 async function addRoletodb() {
     let departments = await (getDepartmentsname())
@@ -209,7 +233,7 @@ async function addRoletodb() {
             type: 'list',
             name: 'department',
             message: 'Select the department for this role',
-            choices: departments.map(choices => choices.department_name)
+            choices: departments.map(choices => choices.deparetment_name)
         }
     ])
     addRole(roles)
@@ -236,5 +260,3 @@ async function adddep() {
     console.log(`Adding ${departments.department_name} to the database`)
     start()
 }
-
-// ALL TABLES ARE GETTING ADDED TO MY SQL ITS THE OTHER F THINGS THAT DONT WORK
