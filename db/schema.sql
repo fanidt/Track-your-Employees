@@ -48,3 +48,6 @@ CREATE TABLE employee(
 
 
 
+SELECT employee.role_id, employee.manager_id FROM employee RIGHT OUTER JOIN roles ON employee.role_id = roles.id;
+
+SELECT roles.department_id FROM roles RIGHT OUTER JOIN departements ON  roles.department_id = departements.id;
