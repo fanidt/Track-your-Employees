@@ -1,0 +1,27 @@
+{
+  "name": "track-your-employees",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node index.js"
+    
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/fanidt/Track-your-Employees.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/fanidt/Track-your-Employees/issues"
+  },
+  "homepage": "https://github.com/fanidt/Track-your-Employees#readme",
+  "dependencies": {
+    "console.table": "^0.10.0",
+    "express.js": "^1.0.0",
+    "inquirer": "^8.1.2",
+    "mysql2": "^2.2.5"
+  }
+}
